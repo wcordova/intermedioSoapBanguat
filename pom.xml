@@ -58,34 +58,15 @@
             <version>2.2.0</version>
         </dependency>
 
-
-
-
-
-        <!-- Spring Web Services -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web-services</artifactId>
+            <groupId>javax.xml.soap</groupId>
+            <artifactId>javax.xml.soap-api</artifactId>
+            <version>1.4.0</version>
         </dependency>
-
-        <!-- JAXB (para generar clases a partir de WSDL) -->
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
-        <!-- Otros que podrías necesitar -->
-        <dependency>
-            <groupId>org.springframework.ws</groupId>
-            <artifactId>spring-ws-core</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-            <version>4.0.4</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
 
     </dependencies>
@@ -98,25 +79,19 @@
 
             </plugin>
 
-            <!-- Plugin para generar clases a partir del WSDL -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxws-maven-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <wsdlUrls>
-                        <wsdlUrl>ruta/a/tu/archivo.wsdl</wsdlUrl>
-                    </wsdlUrls>
-                    <packageName>com.tu.paquete</packageName>
-                </configuration>
-            </plugin>
+        <plugin>
+            <groupId>org.jvnet.jax-ws-commons</groupId>
+            <artifactId>jaxws-maven-plugin</artifactId>
+            <version>2.3</version>
+            <configuration>
+                <xdebug>true</xdebug>
+                <sourceDestDir>${basedir}/src/main/java</sourceDestDir>
+                <wsdlUrls>
+                    <wsdlUrl>https://www.banguat.gob.gt/variables/ws/TipoCambio.asmx?WSDL</wsdlUrl>
+                </wsdlUrls>
+                <verbose>true</verbose>
+            </configuration>
+        </plugin>
 
         </plugins>
 
