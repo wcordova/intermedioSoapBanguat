@@ -1,13 +1,13 @@
 package com.umg.edu.gt.progra2.HelloWorld.Controller;
 
+import com.umg.edu.gt.progra2.HelloWorld.Dto.TipoCambio;
 import com.umg.edu.gt.progra2.HelloWorld.service.TipoCambioSoapService;
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class TipoCambioController {
@@ -16,19 +16,38 @@ public class TipoCambioController {
     private TipoCambioSoapService tipoCambioSoapService;
 
     @GetMapping("/tipoCambioDia")
-    public ResponseEntity<Map<String, Object>> obtenerTipoCambioDia() {
+    public ResponseEntity<Object> obtenerTipoCambioDia() {
         String tipoCambio = tipoCambioSoapService.obtenerTipoCambioDia();
-        Map<String, Object> response = new HashMap<>();
 
+        // Verificar si la respuesta contiene errores
         if (tipoCambio.contains("Error")) {
-            response.put("status", "error");
-            response.put("message", tipoCambio);
-            return ResponseEntity.status(500).body(response);
+            return ResponseEntity.status(500).body("Error: " + tipoCambio);
         }
 
-        // Aquí devolvemos el XML completo en el campo 'data'
-        response.put("status", "success");
-        response.put("data", tipoCambio); // Se devuelve el XML completo
-        return ResponseEntity.ok(response);
+        try {
+            // Convertir el XML a JSON
+            JSONObject xmlJSONObj = XML.toJSONObject(tipoCambio);
+
+            // datos específicos del JSON
+            JSONObject varDolar = xmlJSONObj.getJSONObject("soap:Envelope")
+                    .getJSONObject("soap:Body")
+                    .getJSONObject("TipoCambioDiaResponse")
+                    .getJSONObject("TipoCambioDiaResult")
+                    .getJSONObject("CambioDolar")
+                    .getJSONObject("VarDolar");
+
+            // traer los valores que te interesan
+            String fecha = varDolar.getString("fecha");
+            double referencia = varDolar.getDouble("referencia");
+
+            // se creo la instancia del TipoCambio
+            TipoCambio tipoCambioDTO = new TipoCambio(fecha, referencia);
+
+            // Devolver la respuesta con el TipoCambio
+            return ResponseEntity.ok(tipoCambioDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error al procesar el XML.");
+        }
     }
 }
