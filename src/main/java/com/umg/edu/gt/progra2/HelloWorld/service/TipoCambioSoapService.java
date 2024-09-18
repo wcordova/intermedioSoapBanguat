@@ -1,14 +1,25 @@
 package com.umg.edu.gt.progra2.HelloWorld.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 
 @Service
 public class TipoCambioSoapService {
+
+    @Value("${proxy.host:localhost}")
+    private String proxyHost;
+
+    @Value("${proxy.port:8080}")
+    private int proxyPort;
 
     public String obtenerTipoCambioDia() {
         String soapEndpoint = "http://www.banguat.gob.gt/variables/ws/TipoCambio.asmx";
@@ -23,17 +34,23 @@ public class TipoCambioSoapService {
                         "</soap:Body>" +
                         "</soap:Envelope>";
 
-        RestTemplate restTemplate = new RestTemplate();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+        requestFactory.setProxy(proxy);
+
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_XML);
         headers.add("SOAPAction", soapAction);
+        headers.add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/91.0.4472.124 Safari/537.36");
 
         HttpEntity<String> request = new HttpEntity<>(soapRequest, headers);
 
         try {
+            // Aquí se devuelve todo el cuerpo de la respuesta, no solo el tipo de cambio
             return restTemplate.exchange(soapEndpoint, HttpMethod.POST, request, String.class).getBody();
         } catch (Exception e) {
-            // Registra el error o lanza una excepción más detallada
             return "Error al obtener el tipo de cambio: " + e.getMessage();
         }
     }

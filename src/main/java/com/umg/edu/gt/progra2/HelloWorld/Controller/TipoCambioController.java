@@ -16,9 +16,9 @@ public class TipoCambioController {
     private TipoCambioSoapService tipoCambioSoapService;
 
     @GetMapping("/tipoCambioDia")
-    public ResponseEntity<Map<String, String>> obtenerTipoCambioDia() {
+    public ResponseEntity<Map<String, Object>> obtenerTipoCambioDia() {
         String tipoCambio = tipoCambioSoapService.obtenerTipoCambioDia();
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
         if (tipoCambio.contains("Error")) {
             response.put("status", "error");
@@ -26,8 +26,9 @@ public class TipoCambioController {
             return ResponseEntity.status(500).body(response);
         }
 
+        // Aquí devolvemos el XML completo en el campo 'data'
         response.put("status", "success");
-        response.put("tipoCambio", tipoCambio);
+        response.put("data", tipoCambio); // Se devuelve el XML completo
         return ResponseEntity.ok(response);
     }
 }
