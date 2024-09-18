@@ -2,6 +2,7 @@ package com.umg.edu.gt.progra2.HelloWorld.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,8 +23,8 @@ public class TipoCambioSoapService {
     private int proxyPort;
 
     public String obtenerTipoCambioDia() {
-        String soapEndpoint = "http://www.banguat.gob.gt/variables/ws/TipoCambio.asmx";
-        String soapAction = "http://www.banguat.gob.gt/variables/ws/TipoCambioDia";
+        String soapEndpoint = "https://www.banguat.gob.gt/variables/ws/TipoCambio.asmx";
+        String soapAction = "https://www.banguat.gob.gt/variables/ws/TipoCambio.asmx?op=TipoCambioDia";
 
         String soapRequest =
                 "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
@@ -48,9 +49,14 @@ public class TipoCambioSoapService {
         HttpEntity<String> request = new HttpEntity<>(soapRequest, headers);
 
         try {
-            // Aquí se devuelve todo el cuerpo de la respuesta, no solo el tipo de cambio
-            return restTemplate.exchange(soapEndpoint, HttpMethod.POST, request, String.class).getBody();
+            String response = restTemplate.exchange(soapEndpoint, HttpMethod.POST, request, String.class).getBody();
+            return response;  // Devuelve la respuesta completa
+        } catch (HttpClientErrorException e) {
+            // Imprime la respuesta de error para depuración
+            System.out.println("Response Body: " + e.getResponseBodyAsString());
+            return "Error al obtener el tipo de cambio: " + e.getStatusCode() + " : " + e.getResponseBodyAsString();
         } catch (Exception e) {
+            // Maneja otras excepciones
             return "Error al obtener el tipo de cambio: " + e.getMessage();
         }
     }
