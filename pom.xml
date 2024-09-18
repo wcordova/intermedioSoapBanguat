@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.34</version>
+			<!--<version>1.18.34</version>-->
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -62,6 +62,27 @@
 
 
 
+    <!-- Spring Web Services -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web-services</artifactId>
+    </dependency>
+
+    <!-- JAXB (para generar clases a partir de WSDL) -->
+    <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+		<version>2.3.1</version>
+    </dependency>
+
+    <!-- Otros que podrías necesitar -->
+    <dependency>
+        <groupId>org.springframework.ws</groupId>
+        <artifactId>spring-ws-core</artifactId>
+    </dependency>
+
+
+
 	</dependencies>
 
 	<build>
@@ -70,6 +91,31 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <!-- Ubicación de tu archivo WSDL -->
+                <schemas>
+                    <schema>
+                        <fileset>
+                            <directory>${basedir}/src/main/resources/wsdl</directory>
+                            <includes>
+                                <include>*.wsdl</include>
+                            </includes>
+                        </fileset>
+                    </schema>
+                </schemas>
+                <!-- Directorio de salida para las clases generadas -->
+                <outputDirectory>${project.build.directory}/generated-sources/jaxb</outputDirectory>
+                <!-- Paquete donde se generarán las clases -->
+                <packageName>com.example.soap.client</packageName>
+            </configuration>
+
 
 
 		</plugin>
@@ -77,5 +123,7 @@
 
 		</plugins>
 	</build>
+
+
 
 </project>
