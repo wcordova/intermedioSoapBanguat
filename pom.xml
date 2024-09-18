@@ -58,6 +58,10 @@
 		   <version>2.2.0</version>
 		</dependency>
 
+
+
+
+
 	</dependencies>
 
 	<build>
@@ -65,7 +69,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+
+
+
+		</plugin>
+
+
 		</plugins>
 	</build>
 
