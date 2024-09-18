@@ -30,6 +30,11 @@ public class TipoCambioSoapService {
 
         HttpEntity<String> request = new HttpEntity<>(soapRequest, headers);
 
-        return restTemplate.exchange(soapEndpoint, HttpMethod.POST, request, String.class).getBody();
+        try {
+            return restTemplate.exchange(soapEndpoint, HttpMethod.POST, request, String.class).getBody();
+        } catch (Exception e) {
+            // Registra el error o lanza una excepción más detallada
+            return "Error al obtener el tipo de cambio: " + e.getMessage();
+        }
     }
 }
