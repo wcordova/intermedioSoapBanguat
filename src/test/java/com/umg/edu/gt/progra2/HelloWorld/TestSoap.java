@@ -7,11 +7,13 @@ package com.umg.edu.gt.progra2.HelloWorld;
 import com.umg.edu.gt.progra2.HelloWorld.service.TipoCambioSoapService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  *
  * @author wcordova
  */
+@SpringBootTest
 public class TestSoap {
     
     @Autowired
