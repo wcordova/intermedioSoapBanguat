@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Tipo de Cambio</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Tipo de Cambio</h1>
+        <div class="mt-3">
+            <button id="fetchButton" class="btn btn-primary">Obtener Tipo de Cambio</button>
+            <div id="tipoCambio" class="mt-3"></div>
+            <div id="error" class="text-danger mt-3"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', function() {
+            fetch('/tipoCambio')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error en la solicitud");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('tipoCambio').innerHTML = data;
+                })
+                .catch(err => {
+                    document.getElementById('error').innerText = err.message;
+                });
+        });
+    </script>
+</body>
+</html>
