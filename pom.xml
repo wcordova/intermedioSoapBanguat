@@ -47,10 +47,11 @@
 			<version>20210307</version>
 		</dependency>
 
+		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.26</version>
+			<version>1.18.34</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -58,15 +59,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-                        <!--<scope>test</scope>-->
-		</dependency>
-
-		<!-- Lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.34</version>
-			<scope>provided</scope>
+			<!--<scope>test</scope>-->
 		</dependency>
 
 		<!-- OpenAPI Docs -->
@@ -82,9 +75,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-                
-            
-
 	</dependencies>
 
 	<build>
@@ -95,5 +85,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
